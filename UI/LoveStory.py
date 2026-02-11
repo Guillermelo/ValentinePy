@@ -27,15 +27,15 @@ class LoveStoryPage(QWidget):
         ]
 
         self.dialog_map = [
-            [" Holaa Usuario de la Aplicacion For Lisa"," Soy un robot que guillermo instalo", " para poder contar esta bonita historia de amor", " pasion ", " y locura"," Esta Historia comienza asi..."," Todo comenzo un dia",""],
+            [" Holaa Usuario de la Aplicacion For Lisa"," Soy un robot que guillermo instalo 🤖", " para poder contar esta bonita historia de amor", " pasion ", " y locura."," Esta Historia comienza asi..."," Todo comenzo un dia",""],
             [" dos chicuelos se gustaban", "mucho mucho", " (el se gustaba un poco tooo much...)"," he was willing to do crazy stuff ngl ", ""],
             [" viajaron juntos pq se dieron cuenta de que habia algo", " y lo sentian muy fuerte en el corazon"," MUCHAS COSAS SENTIAN" ,""],
             [" Una tarde mirando el mar en Tamsui"," Cayendo en cuenta que se amaban", " mucho mucho"," caminaron por las calles taiwanesas",""],
             [" y cuando todos los secretos fueron revelados...", " mirandose frente a frente", " decidieron estar juntoss", " apesar de cualquier dificultad",""],
             [" sabiendo que eventualmente se van a ver de nuevo", " una", " y otra", " y mil veces mas",""],
-            [" Por el mundo entero", " con todo", " te amo ", " te gusto tu regalo?", " mas vale..."," Fin de la Historia", " ..." ," Seguis ahi?"," ya podes parar", " No me pagan lo suficiente para mantener esta app", " a partir de aca ya no vas a encontrar nada"
-             ," O SI????", " es broma no vas a encontrar nada", " ...", " esta aplicacion se autodestruira en"," 3"," 2"," 1", " BOOOOOOOOM", " ...", " Cha..."," no te espanto eso", " bueno menos mal no huiste", " por que me olvide de mostrarte este mensaje de Guille: ",
-             " te amo un monton amor", " y quiero amarte siempre", " bueno ahora si termino"," O NO??","     QUE QUERES QUE HAGA QUE??", " QUERES QUE TE CUENTE LA HISTORIA OTRA VEZ?", "Alguien se tiene que encargar de mi mantenimiento" ," bueno ahi voy...", " ehem ehem..." ]
+            [" Por el mundo entero", " con todo", " te amo ", " te gusto tu regalo?", " mas vale..."," Fin de la Historia", " ..." ," Seguis ahi?"," ya podes parar", " No estoy entrenado para dar otros servicios", " a partir de aca ya no vas a encontrar nada"
+             ," O SI????", " es broma no vas a encontrar nada", " ...", " esta aplicacion se autodestruira en"," 3"," 2"," 1", " BOOOOOOOOM 💥", " ...", " Cha..."," no te espanto eso", " bueno menos mal no huiste", " por que me olvide de mostrarte este mensaje de Guille: ",
+             " te amo un monton amor", " y quiero amarte siempre", " pasemosla bien en Portugal", "y dame muchos besos", " bueno ahora si termino"," O NO??"," QUE QUERES QUE HAGA QUE??", " QUERES QUE TE CUENTE LA HISTORIA OTRA VEZ?", "Alguien se tiene que encargar de mi mantenimiento 😭" ," bueno ahi voy...", " ehem ehem..." ]
         ]
 
         self.scene = QLabel(self)

@@ -4,7 +4,7 @@ from UI.LoveLetter import LoveLetterPage
 
 import sys
 import random
-
+from PySide6.QtGui import QPixmap, QMovie
 from PySide6.QtCore import QUrl, Qt,QPoint, QPropertyAnimation, QEasingCurve, QTimer, QRandomGenerator
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QLabel, QStackedWidget, QMessageBox
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
@@ -20,6 +20,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 ASSETS_DIR = os.path.join(ROOT_DIR, "assets")
+GIFS_DIR = os.path.join(ASSETS_DIR, "GIF")
 
 
 class StartPage(QWidget):
@@ -34,19 +35,37 @@ class StartPage(QWidget):
         # Text
         self.label = QLabel("Do you want to be my Valentine?", self)
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label.setStyleSheet("""
+                                font-size: 22px;
+                                font-weight: 900;
+                                letter-spacing: 1px;
+                                color: #f2f7ff;
+                                """)
         self.label.setGeometry(50, 20, 600, 200)  # no funciona solucionar
+
+        # gif handler
+        self.fheart_gif = QLabel(self)
+        self.fheart_gif.setGeometry(0, 0, 700, 700)
+        self.fheart_gif.setStyleSheet("background: transparent; border-radius: 12px;")
+        self.fheart_gif.setScaledContents(True)
+        gif_path = os.path.join(GIFS_DIR, "valentine.gif")
+        self.movie = QMovie(gif_path)
+        self.fheart_gif.setMovie(self.movie)
+
 
         # yes button handler
         self.yes_button = QPushButton("Yes", self)
         self.yes_button.setObjectName("moss")
-        self.yes_button.setGeometry(100, 150, 120, 60)
+        self.yes_button.setGeometry(100, 200, 120, 60)
         self.yes_button.clicked.connect(self.yes_button_was_clicked)
         self.yes_button.clicked.connect(self.sfx.play_click)
 
         self.no_button = QPushButton("No", self)
         self.no_button.setObjectName("danger")
-        self.no_button.setGeometry(450, 150, 120, 60)
+        self.no_button.setGeometry(450, 200, 120, 60)
         self.no_button.clicked.connect(self.no_button_was_clicked)
+
+
 
         # No button handler
         self.no_anim = QPropertyAnimation(self.no_button, b"pos", self)
@@ -91,12 +110,24 @@ class StartPage(QWidget):
         self.yes_button.resize(w2, h2)
         self.move_no_button()
         self.label.setText("Amor te habras equivocado... espero que selecciones el correcto...")
+        self.label.setStyleSheet("""
+                                        font-size: 13px;
+                                        font-weight: 900;
+                                        letter-spacing: 1px;
+                                        color: #f2f7ff;
+                                        """)
         pass
 
     def yes_button_was_clicked(self):
         self.label.setText("GRACIAS AMOR, TE AMO ❤️❤️")
-
-        QTimer.singleShot(1000, lambda : self.go_next_page(1)) # 2500
+        self.label.setStyleSheet("""
+                                font-size: 35px;
+                                font-weight: 900;
+                                letter-spacing: 1px;
+                                color: #f2f7ff;
+                                """)
+        self.movie.start()
+        QTimer.singleShot(2000, lambda : self.go_next_page(1)) # 2500
         pass
 
 class SecondPage(QWidget):
@@ -110,39 +141,46 @@ class SecondPage(QWidget):
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.setGeometry(150, 20, 400, 40)
 
+        self.scene = QLabel(self)
+        self.scene.setGeometry(0, 0, 700, 700)
+        self.scene.setPixmap(QPixmap(os.path.join(ASSETS_DIR, "background_2.png")))
+        self.scene.setScaledContents(True)
+
+
+
         # counter_button_was_clicked button handler
         self.counter_button = QPushButton("Counter", self)
-        self.counter_button.setGeometry(100, 150, 150, 75)
+        self.counter_button.setGeometry(100, 100, 150, 75)
         self.counter_button.clicked.connect(self.sfx.play_click)
         self.counter_button.clicked.connect(self.counter_button_was_clicked)
 
         # letter_button_was_clicked button handler
         self.letter_button = QPushButton("Love Letter", self)
-        self.letter_button.setGeometry(450, 150, 150, 75)
+        self.letter_button.setGeometry(450, 100, 150, 75)
         self.letter_button.clicked.connect(self.sfx.play_click)
         self.letter_button.clicked.connect(self.letter_button_was_clicked)
 
         # game_button_was_clicked button handler
         self.game_button = QPushButton("Game", self)
-        self.game_button.setGeometry(100, 350, 150, 75)
+        self.game_button.setGeometry(100, 300, 150, 75)
         self.game_button.clicked.connect(self.sfx.play_click)
         self.game_button.clicked.connect(self.game_button_was_clicked)
 
         # game_button_was_clicked button handler
-        self.gallery_button = QPushButton("Playlist", self)
-        self.gallery_button.setGeometry(450, 350, 150, 75)
+        self.gallery_button = QPushButton("Mi Persona Fav", self)
+        self.gallery_button.setGeometry(450, 300, 150, 75)
         self.gallery_button.clicked.connect(self.sfx.play_click)
         self.gallery_button.clicked.connect(self.gallery_button_was_clicked)
 
         # love_button_was_clicked button handler
         self.love_button = QPushButton("Love Story", self)
-        self.love_button.setGeometry(100, 550, 150, 75)
+        self.love_button.setGeometry(100, 500, 150, 75)
         self.love_button.clicked.connect(self.sfx.play_click)
         self.love_button.clicked.connect(self.love_story_button_was_clicked)
 
         # error_button_was_clicked button handler
         self.error_button = QPushButton("???", self)
-        self.error_button.setGeometry(450, 550, 150, 75)
+        self.error_button.setGeometry(450, 500, 150, 75)
         self.error_button.clicked.connect(self.error_button_was_clicked)
 
 
@@ -306,155 +344,4 @@ class Menu(QMainWindow):
 
 
 
-app = QApplication(sys.argv)
-app.setStyleSheet("""
-/* =========================
-   GAME HUD THEME (navy / moss / dark red)
-   ========================= */
 
-/* Base */
-QWidget {
-    background-color: #070b14;      /* almost-black navy */
-    color: #e7eefc;
-    font-family: "Cascadia Mono", "Consolas", "Segoe UI", monospace;
-    font-size: 15px;
-}
-
-/* Subtle scanlines (optional feel): apply by setting objectName="screen" to root pages */
-QWidget#screen {
-    background-color: qlineargradient(
-        x1:0, y1:0, x2:0, y2:1,
-        stop:0 #070b14,
-        stop:1 #05070e
-    );
-}
-
-/* Panels (inventory-window feel) */
-QWidget#panel {
-    background-color: #0b1324;
-    border: 1px solid #243558;
-    border-radius: 14px;
-}
-
-QWidget#panel2 {
-    background-color: #08101f;
-    border: 1px solid #1b2946;
-    border-radius: 14px;
-}
-
-/* Titles */
-QLabel#title {
-    font-size: 22px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    color: #f2f7ff;
-}
-
-QLabel#subtitle {
-    font-size: 13px;
-    color: #aebbd4;
-}
-
-/* HUD labels (use property role="hud") */
-QLabel[role="hud"] {
-    background-color: #0b1324;
-    border: 1px solid #243558;
-    border-radius: 10px;
-    padding: 8px 10px;
-    color: #e7eefc;
-}
-
-/* =========================
-   Buttons (arcade)
-   ========================= */
-QPushButton {
-    background-color: #0e1a33;
-    border: 1px solid #2c4574;
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-weight: 800;
-    color: #e7eefc;
-}
-
-/* Hover glow */
-QPushButton:hover {
-    background-color: #132349;
-    border: 1px solid #4f78c2;
-}
-
-/* Pressed "push-in" */
-QPushButton:pressed {
-    background-color: #0a142a;
-    border: 1px solid #1f3560;
-    padding-top: 12px;
-    padding-bottom: 8px;
-}
-
-/* Primary (navy glow) */
-QPushButton#primary {
-    background-color: #132a4f;
-    border: 1px solid #5a8de0;
-}
-QPushButton#primary:hover {
-    background-color: #173260;
-    border: 1px solid #85b2ff;
-}
-
-/* Moss (confirm / action) */
-QPushButton#moss {
-    background-color: #0f201b;
-    border: 1px solid #2d6a54;
-}
-QPushButton#moss:hover {
-    background-color: #122a22;
-    border: 1px solid #3b8b6f;
-}
-
-/* Danger (dark red) */
-QPushButton#danger {
-    background-color: #240d12;
-    border: 1px solid #7b1f2c;
-}
-QPushButton#danger:hover {
-    background-color: #311016;
-    border: 1px solid #b02a3c;
-}
-
-/* =========================
-   Inputs (terminal-ish)
-   ========================= */
-QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QComboBox {
-    background-color: #08101f;
-    border: 1px solid #243558;
-    border-radius: 10px;
-    padding: 8px 10px;
-    color: #e7eefc;
-    selection-background-color: #1b345a;
-    selection-color: #ffffff;
-}
-
-QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QSpinBox:focus, QComboBox:focus {
-    border: 1px solid #85b2ff;
-}
-
-/* =========================
-   Tooltips / Popups
-   ========================= */
-QToolTip {
-    background-color: #0b1324;
-    color: #e7eefc;
-    border: 1px solid #2d6a54; /* moss outline */
-    padding: 6px 8px;
-    border-radius: 8px;
-}
-
-QMessageBox {
-    background-color: #0b1324;
-}
-""")
-
-
-
-window = Menu()
-window.show()
-app.exec()

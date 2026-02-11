@@ -2,9 +2,14 @@ from PySide6.QtCore import QSize, Qt,QPoint, QPropertyAnimation, QEasingCurve, Q
 from zoneinfo import ZoneInfo
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QLabel, QStackedWidget
 from datetime import datetime
-
+import os
+from PySide6.QtGui import QPixmap, QMovie
 from UI.SoundFx import SoundFx
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+ASSETS_DIR = os.path.join(ROOT_DIR, "assets")
+GIFS_DIR = os.path.join(ASSETS_DIR, "GIF")
 TZ_TAIPEI = ZoneInfo("Asia/Taipei")
 
 class CounterPage(QWidget):
@@ -15,6 +20,30 @@ class CounterPage(QWidget):
 
         self.together_since = datetime(2025, 12, 8, 1, 30, 0, tzinfo=TZ_TAIPEI)
         self.know_each_other_since = datetime(2025, 8, 16, 22, 00, 0, tzinfo=TZ_TAIPEI)
+
+
+        # gif handler
+        self.fire_gif = QLabel(self)
+        self.fire_gif.setGeometry(0, 0, 700, 700)
+        self.fire_gif.setStyleSheet("background: transparent; border-radius: 12px;")
+        self.fire_gif.setScaledContents(True)
+        gif_path = os.path.join(GIFS_DIR, "fire.gif")
+        self.movie2 = QMovie(gif_path)
+        self.fire_gif.setMovie(self.movie2)
+        self.movie2.start()
+
+        # gif handler
+        self.heart_gif = QLabel(self)
+        self.heart_gif.setGeometry(0, 0, 700, 700)
+        self.heart_gif.setStyleSheet("background: transparent; border-radius: 12px;")
+        self.heart_gif.setScaledContents(True)
+        gif_path = os.path.join(GIFS_DIR, "heart.gif")
+        self.movie = QMovie(gif_path)
+        self.heart_gif.setMovie(self.movie)
+        self.movie.setScaledSize(self.heart_gif.size())
+        self.heart_gif.hide()  # estado default: invisible
+        self.movie.stop()
+        self.movie.jumpToFrame(0)
 
         self.counter_name_label = QLabel("Together Since:",self)
         self.counter_name_label.setGeometry(100, 200, 500, 60)
@@ -75,6 +104,17 @@ class CounterPage(QWidget):
         seconds2 = total_seconds2 % 60
         if seconds2 == 0:
             self.sfx.play_clock_big_tick()
+
+            self.heart_gif.show()
+            self.movie.stop()
+            self.movie.jumpToFrame(4)  # tu frame “vacío”
+            self.movie.start()
+
+            def stop_and_hide():
+                self.movie.stop()
+                self.heart_gif.hide()
+
+            QTimer.singleShot(4000, stop_and_hide)
         else:
             self.sfx.play_clock_tick()
 
