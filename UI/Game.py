@@ -11,13 +11,14 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 ASSETS_DIR = os.path.join(ROOT_DIR, "assets")
 
-# , y imagenes
 
 class GamePage(QWidget):
     def __init__(self, go_next_page):
         super().__init__()
         self.go_next_page = go_next_page
-        self.words = ["hola", "adios", "sol", "luna", "corazon"]
+        self.words = ["te amo", "lisa", "guille", "mi amor", "corazon",
+                      "bonita", "hermosa","love", "te quiero",
+                      "bebe", "sol", "luna", "reina", "smart"]
         self.falling_words = []
         self.alive_time = 0
         self.spawn_rate = 4000 # 4 seconds
@@ -139,7 +140,7 @@ class GamePage(QWidget):
                 fw.kill()
                 self.killed_words+=1
                 self.killed_words_label.setText(f"killed_words_label: {self.killed_words}")
-                if self.spawn_rate > 300:
+                if self.spawn_rate > 100:
                     self.spawn_rate-=50
                 self.sfx.play_killed_word()
                 break
@@ -159,7 +160,11 @@ class GamePage(QWidget):
             # self.alive_words = random_words
             speed = random.randint(3, 6) + (self.killed_words)
             for text in random_words:
-                fw = FallingWord(self, text, speed=speed,size=random.randint(30, 60))
+                size = random.randint(30, 60)
+                y = 30  # o random en un rango chico si querés
+                x = self.pick_spawn_x(text, size, y=y)
+
+                fw = FallingWord(self, text, size=size, x=x, y=y, speed=speed)
                 self.falling_words.append(fw)
 
 
@@ -203,4 +208,44 @@ class GamePage(QWidget):
                 fw.kill()
         self.game_over_label.show()
         self.sfx.play_game_over()
+
+    def pick_spawn_x(self, text, size, y=30, tries=40, min_gap=20):
+        # márgenes (ajustá a tu pantalla)
+        left = 20
+        right = 680 - 20
+
+        # estimación inicial de ancho; si querés ultra exacto, podemos usar QFontMetrics
+        approx_w = max(60, int(len(text) * size * 0.55))
+        max_x = max(left, right - approx_w)
+
+        alive = [fw for fw in self.falling_words if fw.alive]
+
+        for _ in range(tries):
+            x = random.randint(left, max_x)
+
+            # caja candidata (aprox)
+            cand_l = x
+            cand_t = y
+            cand_r = x + approx_w
+            cand_b = y + size
+
+            ok = True
+            for fw in alive:
+                r = fw.label.geometry()  # real
+                l2, t2, r2, b2 = r.left(), r.top(), r.right(), r.bottom()
+
+                overlap = not (
+                        cand_r + min_gap < l2 or
+                        cand_l - min_gap > r2 or
+                        cand_b + min_gap < t2 or
+                        cand_t - min_gap > b2
+                )
+                if overlap:
+                    ok = False
+                    break
+
+            if ok:
+                return x
+
+        return random.randint(left, max_x)
 
